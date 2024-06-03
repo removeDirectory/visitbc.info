@@ -1,0 +1,17 @@
+name: Build/release
+
+on: push
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check out Git Repo
+              uses: actions/checkout@v1
+
+            - name: "Compile"
+              run: tar -czvf upload.tar.gz *
+
+            - name: "Push to Host"
+              run: 'curl -X POST -H "Authorization: Bearer ${{ secrets.DEPLOY }}" -F "upload=@upload.tar.gz" "https://sites.1f349.com/u?site=visitbc.info&branch=${{ github.ref_name }}"'
